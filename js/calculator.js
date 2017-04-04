@@ -60,7 +60,7 @@ angular.module('calculatorApp', [])
 			var totalDiscount = cartList.discount;
 
 			var totalAmount = $scope.totalAmount();
-			var discount, discountRemainder = 0;
+			var discount, discountApplied = 0;
 
 			var largestPrice = $scope.largestPrice();
 
@@ -69,18 +69,19 @@ angular.module('calculatorApp', [])
 			angular.forEach(cartList.products, function(product, i){
 				
 				discount = Math.round((product.price / totalAmount) * totalDiscount);
-				discountRemainder += discount;
+				discountApplied += discount;
 				
 				product.discount = product.price - discount;
 				
 				totalDiscount = totalDiscount - discount;
 				if(product.price == largestPrice){
-					product.discount = product.discount - (cartList.discount - discountRemainder);
+					product.discount = product.discount - (cartList.discount - discountApplied);
 				}
 				
 				return product.discount;
 				
 			});
+
 			cartList.discount = '';
 			
 		};
