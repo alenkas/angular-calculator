@@ -3,15 +3,84 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Calculator</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" href="css/style.css"> -->
+	<style>
+		.form-group {
+			display: inline-block;
+		}
+		.form-control {
+			width: 200px;
+		}
+
+		.form-inline {
+			display: inline;
+		}
+
+		p.bg-danger {
+			padding: 15px;
+		}
+
+		.hide-message {
+			display: none;
+		}
+	</style>
 	<script src="js/angular.min.js"></script>
 	<script src="js/calculator.js"></script>
 </head>
 <body>
-	<div>
-		<label>Name:</label>
-		<input type="text" ng-model="yourName" placeholder="Enter a name">
-		<hr>
-		<h1>Hello {{yourName}}!</h1>
+	<div class="container" ng-controller="CalculatorController as cartList">
+
+		<h2>Добавить продукт</h2>
+		<div class="add-product">
+			<form class="form-inline" ng-submit="cartList.addProduct()">
+				<div class="form-group">
+					<label>Продукт</label>
+					<input class="form-control" type="text" ng-model="cartList.productName">	
+				</div>
+				<div class="form-group">
+					<label>Цена</label>
+					<input class="form-control" type="text" ng-model="cartList.productPrice">	
+				</div>
+				<input type="submit" class="btn btn-default">
+			</form>
+		</div>
+		<h2>Корзина</h2>
+		<div class="cart">
+			<table class="table table-bordered table-striped">
+				<thead>
+				<tr class="table-row table-header">
+					<th>Продукт</th>
+					<th>Цена</th>
+					<th>Цена со скидкой</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="product in cartList.products">
+					<td>{{product.product}}</td>
+					<td>{{product.price}}</td>
+					<td>{{product.discount}}</td>
+				</tr>
+				</tbody>
+				<tfooter>
+					<tr>
+						<td></td>
+						<td>{{totalAmount()}}</td>
+						<td>{{totalDiscountAmount()}}</td>
+					</tr>
+				</tfooter>
+			</table>
+		</div>
+		<div class="discount">
+			<form class="form-inline" ng-submit="cartList.addDiscount()">
+				<div class="form-group">
+			Применить скидку
+				<input class="form-control form-inline" type="text" ng-model="cartList.discount"> рублей
+				<input type="submit" class="btn btn-default">
+				</div>
+			</form>
+		</div>
+		<p class="error-message bg-danger" ng-show="showErrorMessage">{{errorMessage}}</p>
 	</div>
 </body>
 </html>
