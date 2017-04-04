@@ -33,16 +33,6 @@ angular.module('calculatorApp', [])
 			return totalAmount;
 		};
 
-		$scope.totalDiscountAmount = function(){
-			var totalDiscountAmount = 0;
-			angular.forEach(cartList.products, function(product){
-				totalDiscountAmount += +product.discount;
-			});
-			if(totalDiscountAmount){
-				return totalDiscountAmount;	
-			}
-		};
-
 		$scope.largestPrice = function(){
 			var helperArray = [];
 			var theHighestPrice;
@@ -63,24 +53,32 @@ angular.module('calculatorApp', [])
 			var discount, discountApplied = 0;
 
 			var largestPrice = $scope.largestPrice();
+			var productWithLargestPrice;
 
 			$scope.showMessage("Скидка " + totalDiscount + " рублей применена");
 			
 			angular.forEach(cartList.products, function(product, i){
-				
+
 				discount = Math.round((product.price / totalAmount) * totalDiscount);
+				if((product.price / totalAmount) * totalDiscount < 0.5){
+					discount = 1;
+				}
 				discountApplied += discount;
 				
 				product.discount = product.price - discount;
-				
+
 				totalDiscount = totalDiscount - discount;
+				
 				if(product.price == largestPrice){
-					product.discount = product.discount - (cartList.discount - discountApplied);
+					productWithLargestPrice = product;
+				// 	product.discount = product.discount - (cartList.discount - discountApplied);
 				}
 				
 				return product.discount;
 				
 			});
+			
+			productWithLargestPrice.discount = productWithLargestPrice.discount - (cartList.discount - discountApplied);
 
 			cartList.discount = '';
 			
